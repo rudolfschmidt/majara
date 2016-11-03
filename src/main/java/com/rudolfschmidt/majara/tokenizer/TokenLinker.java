@@ -7,10 +7,14 @@ import com.rudolfschmidt.majara.tokens.TokenType;
 import java.nio.file.Path;
 import java.util.List;
 
+/**
+ * link tokens interpreting keyword extends and block
+ */
 public class TokenLinker {
 
     static void linkTokens(Tokenizer tokenizer) {
-        tokenizer.getTokens().stream().findFirst()
+        tokenizer.getTokens().stream()
+				.findFirst()
                 .filter(token -> Code.EXTENDS.equals(token.getValue()))
                 .ifPresent(token -> {
                     Path path = tokenizer.getPath(token.getTokens().get(0).getValue());

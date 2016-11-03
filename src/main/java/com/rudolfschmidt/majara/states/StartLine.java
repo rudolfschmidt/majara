@@ -4,6 +4,9 @@ import com.rudolfschmidt.majara.tokenizer.Tokenizer;
 import com.rudolfschmidt.majara.tokens.Token;
 import com.rudolfschmidt.majara.tokens.TokenType;
 
+/**
+ * Start State of Tokenizer
+ */
 public class StartLine implements State {
 
     private int indent;
@@ -24,8 +27,7 @@ public class StartLine implements State {
         }
 
         if (character.isLetter()) {
-            Token token = Token.newInstance(TokenType.ELEMENT, character.getCharacter());
-            tokenizer.addToken(indent, token);
+            tokenizer.addToken(indent, Token.newInstance(TokenType.ELEMENT, character.getCharacter()));
             tokenizer.setState(new Name());
             return;
         }
@@ -49,7 +51,7 @@ public class StartLine implements State {
         }
 
         if (character.isHash()) {
-            tokenizer.addToken(Token.newInstance(TokenType.ELEMENT, "div"));
+			tokenizer.addToken(indent, Token.newInstance(TokenType.ELEMENT, "div"));
             tokenizer.addToken(Token.newInstance(TokenType.ATTRIBUTE, "id"));
             tokenizer.addToken(Token.newInstance(TokenType.ATTRIBUTE_TEXT_VALUE));
             tokenizer.setState(new Id());

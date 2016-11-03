@@ -36,9 +36,9 @@ public class TokenCompiler {
 
 	private void compile(Token token, String prefix, boolean inline, StringBuilder sb) {
 
-		if (token.getType() == TokenType.ATTRIBUTE
-				|| token.getType() == TokenType.ATTRIBUTE_TEXT_VALUE
-				|| token.getType() == TokenType.ATTRIBUTE_MODEL_VALUE) {
+		if (Arrays.asList(TokenType.ATTRIBUTE
+				, TokenType.ATTRIBUTE_TEXT_VALUE
+				, TokenType.ATTRIBUTE_MODEL_VALUE).contains(token.getType())) {
 			return;
 		}
 
@@ -63,7 +63,7 @@ public class TokenCompiler {
 		}
 
 		if (Code.INCLUDE.equals(token.getValue())) {
-			compileWithoutElementValue(token.getTokens(), prefix, inline, sb);
+			compileInclude(token.getTokens(), prefix, inline, sb);
 			return;
 		}
 
@@ -114,7 +114,6 @@ public class TokenCompiler {
 			sb.append("\n");
 		}
 	}
-
 
 	private void compileList(List<Token> tokens, String prefix, boolean inline, StringBuilder sb) {
 		tokens.stream().findFirst().ifPresent(token -> {
@@ -172,6 +171,26 @@ public class TokenCompiler {
 		});
 	}
 
+	private void compileInclude(List<Token> tokens, String prefix, boolean inline, StringBuilder sb) {
+
+		Optional<Token> filtered = tokens.stream()
+				.filter(child -> child.getType() == TokenType.FILTERED_TEXT_VALUE)
+				.findAny();
+
+		if (filtered.isPresent()) {
+
+			compileElementTextValue(filtered.get().getValue(), sb);
+
+		} else {
+
+			tokens.stream()
+					.filter(child -> child.getType() != TokenType.FILTER)
+					.filter(child -> child.getType() != TokenType.ELEMENT_TEXT_VALUE)
+					.forEachOrdered(child -> compile(child, prefix, inline, sb));
+
+		}
+	}
+
 	private void compileElementTextValue(String text, StringBuilder sb) {
 		Optional.ofNullable(text).ifPresent(value -> {
 			for (String key : model.keySet()) {
@@ -190,7 +209,8 @@ public class TokenCompiler {
 	}
 
 	private void compileWithoutElementValue(List<Token> tokens, String prefix, boolean inline, StringBuilder sb) {
-		tokens.stream().filter(child -> child.getType() != TokenType.ELEMENT_TEXT_VALUE)
+		tokens.stream()
+				.filter(child -> child.getType() != TokenType.ELEMENT_TEXT_VALUE)
 				.forEachOrdered(child -> compile(child, prefix, inline, sb));
 	}
 
@@ -228,7 +248,8 @@ public class TokenCompiler {
 						values.set(values.size() - 1, values.get(values.size() - 1) + token.getValue());
 					});
 				} else {
-					name.ifPresent(key -> attributes.get(key).add(token.getValue()));
+					name.ifPresent(key -> attributes.get(key)
+							.add(Optional.ofNullable(token.getValue()).orElse("")));
 					lastValue = true;
 				}
 			}
