@@ -1,8 +1,8 @@
 package com.rudolfschmidt.majara;
 
-import com.rudolfschmidt.majara.compiler.TokenCompiler;
-import com.rudolfschmidt.majara.tokenizer.Tokenizer;
-import com.rudolfschmidt.majara.tokens.Token;
+import com.rudolfschmidt.majara.v2.compiler.MainCompiler;
+import com.rudolfschmidt.majara.v2.tokens.Structure;
+import com.rudolfschmidt.majara.v2.tokenizer.Tokenizer;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,14 +24,20 @@ public class Majara {
 	}
 
 	public String render(String templateFile) {
-		return render(templateFile, Model.newInstance());
+		return render(templateFile, Model.get());
 	}
 
 	public String render(String templateFile, Model model) {
+
 		String suffix = templateSuffix.startsWith(".") ? templateSuffix : "." + templateSuffix;
 		Path path = Paths.get(templateDirectory, templateFile + suffix);
-		List<Token> tokens = Tokenizer.tokenize(path);
-		tokens.forEach(token -> LOGGER.config(token.toString()));
-		return TokenCompiler.newInstance(model, pretty).compile(tokens);
+
+		List<Structure> structures = Tokenizer.tokenize(path);
+
+		String html = MainCompiler.instance(structures, model, pretty).compile();
+		return html;
+
+//		tokens.forEach(token -> LOGGER.config(token.toString()));
+//		return TokenCompiler.newInstance(model, pretty).compile(tokens);
 	}
 }

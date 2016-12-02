@@ -15,7 +15,7 @@ public class Tester {
 		String templateName = getTemplateName();
 		String expected = getExpected(base, templateName);
 		Majara templateEngine = new Majara(base, SUFFIX, false);
-		String actual = templateEngine.render(templateName, Model.newInstance());
+		String actual = templateEngine.render(templateName, Model.get());
 
 		assertEquals(expected, actual);
 	}

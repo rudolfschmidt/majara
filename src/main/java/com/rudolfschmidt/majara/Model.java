@@ -2,21 +2,21 @@ package com.rudolfschmidt.majara;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
 
 public class Model {
 
-	private final Map<String, Object> model;
-
-	public static Model newInstance() {
+	public static Model get() {
 		return new Model(new HashMap<>());
 	}
 
-	public static Model newInstance(String key, Object value) {
+	public static Model get(String key, Object value) {
 		Map<String, Object> map = new HashMap<>();
 		map.put(key, value);
 		return new Model(map);
 	}
+
+	private final Map<String, Object> model;
 
 	private Model(Map<String, Object> model) {
 		this.model = model;
@@ -27,12 +27,8 @@ public class Model {
 		return this;
 	}
 
-	public Set<String> keySet() {
-		return model.keySet();
-	}
-
-	public Object get(String key) {
-		return model.get(key);
+	public Optional<Object> get(String key) {
+		return Optional.ofNullable(model.get(key));
 	}
 
 	public void remove(String key) {
