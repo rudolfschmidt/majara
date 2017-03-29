@@ -1,0 +1,10 @@
+package com.rudolfschmidt.majara.models;
+
+public enum NodeType {
+	ELEMENT_NAME,
+	ATTRIBUTE_KEY,
+	ATTRIBUTE_TEXT_VALUE,
+	ELEMENT_TEXT_VALUE,
+	ELEMENT_MODEL_VALUE,
+	ATTRIBUTE_MODEL_VALUE,
+}

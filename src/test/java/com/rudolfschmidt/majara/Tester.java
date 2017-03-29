@@ -12,20 +12,18 @@ public class Tester {
 	private static final String SUFFIX = "jade";
 
 	public static void renderTest(String base) throws IOException {
-		String templateName = getTemplateName();
-		String expected = getExpected(base, templateName);
-		Majara templateEngine = new Majara(base, SUFFIX, false);
-		String actual = templateEngine.render(templateName, Model.get());
-
+		final String templateName = getTemplateName();
+		final String expected = getExpected(base, templateName);
+		final Majara templateEngine = new Majara(base, SUFFIX, false);
+		final String actual = templateEngine.render(templateName, Model.createModel());
 		assertEquals(expected, actual);
 	}
 
 	public static void renderModelTest(String base, Model model) throws IOException {
-		String templateName = getTemplateName();
-		String expected = getExpected(base, templateName);
-		Majara templateEngine = new Majara(base, SUFFIX, false);
-		String actual = templateEngine.render(templateName, model);
-
+		final String templateName = getTemplateName();
+		final String expected = getExpected(base, templateName);
+		final Majara templateEngine = new Majara(base, SUFFIX, false);
+		final String actual = templateEngine.render(templateName, model);
 		assertEquals(expected, actual);
 	}
 
@@ -37,7 +35,7 @@ public class Tester {
 	}
 
 	private static String getTemplateName() {
-		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+		final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 		return stackTrace[3].getMethodName();
 	}
 }
