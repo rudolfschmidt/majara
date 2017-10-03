@@ -23,13 +23,11 @@ class NodeBuilder {
 		if (token.getIndent() == count) {
 			nodes.add(new Node(token.getValue()));
 		} else {
-			final Node last;
 			try {
-				last = nodes.getLast();
+				add(nodes.getLast().getNodes(), token, ++count);
 			} catch (NoSuchElementException e) {
 				throw new LexerException(token.getLine());
 			}
-			add(last.getNodes(), token, ++count);
 		}
 	}
 }

@@ -3,6 +3,10 @@ package com.rudolfschmidt.majara.transformers;
 import com.rudolfschmidt.majara.Model;
 import com.rudolfschmidt.majara.models.Node;
 import com.rudolfschmidt.majara.models.Token;
+import com.rudolfschmidt.majara.nodesTransformers.CommentsRemover;
+import com.rudolfschmidt.majara.nodesTransformers.ExtendsInterpreter;
+import com.rudolfschmidt.majara.nodesTransformers.IfInterpreter;
+import com.rudolfschmidt.majara.nodesTransformers.IncludeInterpreter;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -26,10 +30,10 @@ public class NodeTransformer {
 
 		Deque<Node> nodes;
 		nodes = NodeBuilder.transform(tokens);
-//		nodes = CommentsRemover.transform(nodes);
-//		nodes = IncludeInterpreter.transform(templatePath, model, nodes);
-//		nodes = ExtendsInterpreter.transform(templatePath, model, nodes);
-//		nodes = IfInterpreter.transform(new ModelTransformer(model), nodes);
+		nodes = CommentsRemover.transform(nodes);
+		nodes = IncludeInterpreter.transform(templatePath, model, nodes);
+		nodes = ExtendsInterpreter.transform(templatePath, model, nodes);
+		nodes = IfInterpreter.transform(new ModelTransformer(model), nodes);
 
 //		System.out.println("#################");
 //		System.out.println("NODES");
